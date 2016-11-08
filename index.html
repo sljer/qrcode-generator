@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>二维码生成</title>
+<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link href="css/bootstrap.css" rel="stylesheet">
+<style>
+#top { margin:100px 0 0;}
+#top .container { max-width:960px;}
+.alert {margin-top:10px;}
+.list-group { margin-bottom:0; margin-top:10px; text-align:center}
+.page-header h1 { font-family:'微软雅黑'}
+#code { position:relative; width:150px; height:150px; margin:0 auto}
+</style>
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/bootstrap.js" type="text/javascript"></script>
+<script src="js/qrcode.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div id="top">
+    <div class="container">
+      <div class="page-header">
+          <h1>二维码生成器<small></small></h1>
+        </div>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon">请输入</span>
+          <input type="text" class="form-control" placeholder="http://www.wuyuejianjue.com" id="url">
+        </div>
+        <div class="alert alert-info">请输入正确的网址，或者文本，支持中文生成！</div>
+        <div class="list-group">
+          <button type="button" class="btn btn-success btn-lg">访问首页</button>
+          <button type="button" class="btn btn-primary btn-lg" id="makeCode">点击生成</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">二维码生成成功</h4>
+      </div>
+      <div class="modal-body">
+        <div class="list-group" id="showRoomInfo">
+            <div id="code"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="save">保存</button>
+        <button type="button" class="btn btn-primary" id="close">关闭</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</body>
+<script>
+window.onload = function(){
+  $('#makeCode').click(function(){
+    var url = $('#url').val();
+    if(!url){
+      $('.alert').attr('class','alert alert-warning').html('输入框不能为空，请重新输入！');
+      return false;
+    }else{
+      $('#code').html('');
+      $('.alert').attr('class','alert alert-success').html('二维码生成成功！')
+      $('#myModal').modal('show');
+      makeCode(url);
+    }
+  });
+
+  $('#close').click(function(){
+    $('#myModal').modal('hide');
+    $('.alert').attr('class','alert alert-info').html('请输入正确的网址，或者文本，支持中文生成！');
+  });
+
+  $('#save').click(function(){
+    var _url = $('#code img').attr('src');
+    var obj = window.open(_url);
+  });
+
+  function makeCode(url){
+    var qrcode = new QRCode(document.getElementById("code"), {
+      width : 150,
+      height : 150
+    });
+    qrcode.makeCode(url);
+  };
+};
+</script>
+</html>
